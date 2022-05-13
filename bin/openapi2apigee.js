@@ -1,37 +1,26 @@
 #!/usr/bin/env node
 'use strict';
+import { readFileSync } from 'fs';
 
-var program = require('commander');
-var command = require('../lib/commands/generateApi/generateApi.js');
-var deploy = require('../lib/commands/deployApi/deployApi.js');
-var version = require('../lib/util/cli').version();
-var netrc = require('netrc')();
+import program from 'commander';
+import { generateApi } from '../lib/commands/generateApi/generateApi.js';
 
 var executed = false;
 
+const { version: v } = JSON.parse(readFileSync('./package.json', 'utf8'));
 program
-  .version(version);
+  .version(v);
 
 program
   .usage('<command> <options>')
   .command('generateApi <apiProxy>')
   .option('-s, --source <source>', 'openapi File Source.')
   .option('-d, --destination <destination>', 'API Bundle destination location.')
-  .option('-D, --deploy', 'Deploy to Apigee Edge')
-  .option('-b, --baseuri <baseuri>', 'Apigee Edge EndPoint to Deploy')
-  .option('-B, --basepath <basepath>', 'Apigee Edge BasePath to Deploy')
-  .option('-o, --organization <organization>', 'Apigee Edge Organization to Deploy')
-  .option('-e, --environments <environments>', 'Apigee Edge Environment to Deploy')
-  .option('-v, --virtualhosts <virtualhosts>', 'Apigee Edge virtual hosts to Deploy')
   .option('-n, --netrc', 'Use credentials in $HOME/.netrc (required)')
-  .option('-u, --username <username>', 'Apigee Edge Username to Deploy')
-  .option('-p, --password <password>', 'Apigee Edge Password to Deploy')
-  .option('-t, --token <token>', 'Apigee Edge Auth Token to Deploy')
-
   .description('Generates Apigee API Bundle')
   .action(function(apiProxy, options) {
     executed = true;
-    command.generateApi(apiProxy, options, function(err, reply) {
+    generateApi(apiProxy, options, function(err, reply) {
       if(err) {
         console.log(err);
         process.exit(1);
@@ -42,17 +31,6 @@ program
         }
         else {
           console.log('Apigee API bundle generated in current directory. ');
-        }
-        if (options.deploy) {
-          deploy.deployApi(apiProxy, options, function (err, reply) {
-            if (err) {
-              console.log(err);
-              process.exit(1);
-            }
-            else {
-              console.log('Deployment to Apigee successfully completed.');
-            }
-          });
         }
       }
     });

@@ -1,21 +1,21 @@
 'use strict'
 
-var should = require('should')
-var path = require('path')
-var generateApi = require('../../lib/commands/generateApi/generateApi')
-var fs = require('fs')
-var xml2js = require('xml2js')
+import should from 'should';
+import * as path from 'path';
+import { generateApi } from '../../lib/commands/generateApi/generateApi.js';
+import * as fs from 'fs';
+import * as xml2js from 'xml2js';
 
 describe('generateApi with CORS proxy (array)', function () {
   var options = {
-    source: path.join(__dirname, '/openapi_files/cors-array.yaml'),
-    destination: path.join(__dirname, '../../api_bundles'),
+    source: path.resolve('test/commands/openapi_files/cors-array.yaml'),
+    destination: path.resolve('api_bundles'),
     apiProxy: 'petStoreCorsArray'
   }
 
   describe('generate', function () {
     it('Correct openapi file should generate proxy', function (done) {
-      generateApi.generateApi(options.apiProxy, options, function (err, reply) {
+      generateApi(options.apiProxy, options, function (err, reply) {
         should.equal(err, null)
         done()
       })

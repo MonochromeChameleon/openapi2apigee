@@ -1,7 +1,7 @@
-var ZSchema = require('z-schema')
-var openapiUtilPath = require('openapi-utils-path-for-uri')
-var openapiUtilParam = require('openapi-utils-param-to-schema')
-var openapiUtilSchema = require('openapi-utils-schema-from-api')
+import * as ZSchema from 'z-schema';
+import * as openapiUtilPath from 'openapi-utils-path-for-uri';
+import * as openapiUtilParam from 'openapi-utils-param-to-schema';
+import * as openapiUtilSchema from 'openapi-utils-schema-from-api';
 
 ZSchema = new ZSchema({
   breakOnFirstError: true,
@@ -10,7 +10,7 @@ ZSchema = new ZSchema({
   reportPathAsArray: true
 })
 
-var policify = {
+export const policify = {
   validateSchema: function (injected, schema) {
     return ZSchema.validate(injected, schema)
   },
@@ -22,4 +22,3 @@ var policify = {
   schemaFromApi: openapiUtilSchema.schemaFromApi
 }
 
-module.exports = policify

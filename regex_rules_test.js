@@ -1,4 +1,4 @@
-var elements = require('./regex_rules.json')
+import { readFile } from 'fs/promises';
 
 var print = function (m1, m2) {
   console.log(m1, m2)
@@ -27,11 +27,15 @@ var block = function (haystack, filters) {
   })
 }
 
-elements.forEach(function (element) {
-  var filters = element.filters
-  if (element.element === 'QueryParam') {
-    if (block(decodeURIComponent(context.proxyRequest.url), filters)) {
-      return
+readFile('./regex_rules.js', 'utf8').then((rules) => JSON.parse(rules)).then((elements) => {
+  elements.forEach(function (element) {
+    var filters = element.filters
+    if (element.element === 'QueryParam') {
+      if (block(decodeURIComponent(context.proxyRequest.url), filters)) {
+        return
+      }
     }
-  }
-})
+  });
+});
+
+

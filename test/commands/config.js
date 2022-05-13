@@ -1,5 +1,5 @@
-var path = require('path')
-var rimraf = require('rimraf')
+import * as path from 'path';
+import * as fs from 'fs';
 
 console.log('Remove generated bundles...')
-rimraf.sync(path.join(__dirname, '../../api_bundles'))
+fs.rmSync(path.resolve('api_bundles'), { recursive: true, force: true });

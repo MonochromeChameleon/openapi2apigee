@@ -1,19 +1,19 @@
 'use strict'
 
-var should = require('should')
-var path = require('path')
-var generateApi = require('../../lib/commands/generateApi/generateApi')
-var generateSkeleton = require('../../lib/commands/generateApi/generateSkeleton.js')
-var fs = require('fs')
+import should from 'should';
+import * as path from 'path';
+import { generateApi } from '../../lib/commands/generateApi/generateApi.js';
+import { generateSkeleton } from '../../lib/commands/generateApi/generateSkeleton.js';
+import * as fs from 'fs';
 
 describe('generateApi', function () {
   describe('generate', function () {
     it('Incorrect openapi file should generate error..', function (done) {
       var options = {
-        source: path.join(__dirname, '/openapi_files/openapi2.yaml'),
-        destination: path.join(__dirname, '../../api_bundles')
+        source: path.resolve('test/commands/openapi_files/openapi2.yaml'),
+        destination: path.resolve('api_bundles')
       }
-      generateApi.generateApi('petStore', options, function (err, reply) {
+      generateApi('petStore', options, function (err, reply) {
         should.notEqual(err, null)
         reply.error.should.eql('openapi parsing failed..')
         done()
@@ -21,10 +21,10 @@ describe('generateApi', function () {
     })
     it('Correct openapi file should not generate error..', function (done) {
       var options = {
-        source: path.join(__dirname, '/openapi_files/openapi1.yaml'),
-        destination: path.join(__dirname, '../../api_bundles')
+        source: path.resolve('test/commands/openapi_files/openapi1.yaml'),
+        destination: path.resolve('api_bundles')
       }
-      generateApi.generateApi('petStore', options, function (err, reply) {
+      generateApi('petStore', options, function (err, reply) {
         should.equal(err, null)
         done()
       })
@@ -52,8 +52,8 @@ describe('generateApi', function () {
   describe('generateSkeleton', function () {
     it('generate Skeleton should create folder structure', function (done) {
       var options = {
-        source: path.join(__dirname, '/openapi_files/openapi1.yaml'),
-        destination: path.join(__dirname, '../../api_bundles'),
+        source: path.resolve('test/commmands/openapi_files/openapi1.yaml'),
+        destination: path.resolve('api_bundles'),
         apiProxy: randomText()
       }
       generateSkeleton(options.apiProxy, options, function (err, reply) {
@@ -71,8 +71,8 @@ describe('generateApi', function () {
     })
     it('destination path ending with / should generate Skeleton Folder', function (done) {
       var options = {
-        source: path.join(__dirname, '/openapi_files/openapi1.yaml'),
-        destination: path.join(__dirname, '../../api_bundles/'),
+        source: path.resolve('test/commands/openapi_files/openapi1.yaml'),
+        destination: path.resolve('api_bundles/'),
         apiProxy: randomText()
       }
       generateSkeleton(options.apiProxy, options, function (err, reply) {

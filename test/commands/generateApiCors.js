@@ -1,21 +1,21 @@
 'use strict'
 
-var should = require('should')
-var path = require('path')
-var generateApi = require('../../lib/commands/generateApi/generateApi')
-var fs = require('fs')
-var xml2js = require('xml2js')
+import should from 'should';
+import * as path from 'path';
+import { generateApi } from '../../lib/commands/generateApi/generateApi.js';
+import * as fs from 'fs';
+import * as xml2js from 'xml2js';
 
 describe('generateApi with CORS proxy', function () {
   var options = {
-    source: path.join(__dirname, '/openapi_files/cors.yaml'),
-    destination: path.join(__dirname, '../../api_bundles'),
+    source: path.resolve('test/commands/openapi_files/cors.yaml'),
+    destination: path.resolve('api_bundles'),
     apiProxy: 'petStoreCors'
   }
 
   describe('generate', function () {
     it('Correct openapi file should generate proxy', function (done) {
-      generateApi.generateApi(options.apiProxy, options, function (err, reply) {
+      generateApi(options.apiProxy, options, function (err, reply) {
         should.equal(err, null)
         done()
       })
@@ -101,7 +101,7 @@ describe('generateApi with CORS proxy', function () {
     describe('virtualhosts option', function (done) {
       it('missing -v flag should generate both default and secure', function (done) {
         options.apiProxy = 'petStoreVirtualBoth'
-        generateApi.generateApi(options.apiProxy, options, function (err, reply) {
+        generateApi(options.apiProxy, options, function (err, reply) {
           should.equal(err, null)
           var proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
           var proxiesFileData = fs.readFileSync(proxiesFilePath)
@@ -118,7 +118,7 @@ describe('generateApi with CORS proxy', function () {
       it("-v 'secure' should generate secure virtual host", function (done) {
         options.apiProxy = 'petStoreVirtualVirtual'
         options.virtualhosts = 'secure'
-        generateApi.generateApi(options.apiProxy, options, function (err, reply) {
+        generateApi(options.apiProxy, options, function (err, reply) {
           should.equal(err, null)
           var proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
           var proxiesFileData = fs.readFileSync(proxiesFilePath)
@@ -135,7 +135,7 @@ describe('generateApi with CORS proxy', function () {
       it("-v 'default' should generate default virtual host", function (done) {
         options.apiProxy = 'petStoreVirtualDefault'
         options.virtualhosts = 'default'
-        generateApi.generateApi(options.apiProxy, options, function (err, reply) {
+        generateApi(options.apiProxy, options, function (err, reply) {
           should.equal(err, null)
           var proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
           var proxiesFileData = fs.readFileSync(proxiesFilePath)

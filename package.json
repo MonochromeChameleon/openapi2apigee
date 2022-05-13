@@ -4,9 +4,11 @@
   "description": "A tool that converts openapi yaml file to Apigee API Proxy Bundle",
   "main": "index.js",
   "scripts": {
-    "test": "standard && ./node_modules/.bin/mocha test/commands/config.js test/commands/*.js",
-    "coverage": "nyc _mocha -- test/util test/commands -R spec"
+    "test": "./node_modules/.bin/mocha test/commands/config.js test/commands/*.js",
+    "lint": "standard",
+    "coverage": "nyc --reporter=lcov _mocha -- test/util test/commands -R spec"
   },
+  "type": "module",
   "bin": {
     "openapi2apigee": "bin/openapi2apigee"
   },
@@ -43,8 +45,8 @@
     "xmlbuilder": "8.2.2"
   },
   "devDependencies": {
-    "mocha": "^6.2.0",
-    "nyc": "^14.1.1",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
     "openapi-utils-param-to-schema": "0.0.8",
     "openapi-utils-path-for-uri": "0.0.6",
     "openapi-utils-schema-from-api": "0.0.4",
