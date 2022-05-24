@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: 1.0.0
-  title: Swagger Petstore Regex Protection (x-a127-services array)
+  title: Swagger Petstore Regex Protection
   license:
     name: MIT
 host: petstore.swagger.io
@@ -12,98 +12,9 @@ consumes:
   - application/json
 produces:
   - application/json
-x-a127-services:
-  - name: input-validation
-    provider: x-input-validation
-    apply:
-      pipe: request
-      endPoint: proxy
-    options:
-      displayName: Add Input Validation
-      continueOnError: 'true'
-  - name: raiseInputValidationFault
-    provider: x-raiseInputValidationFault
-    apply:
-      pipe: request
-      endPoint: proxy
-    options:
-      displayName: Raise Input Validation Error
-      statusCode: 400
-      reasonPhrase: Bad Request
-      continueOnError: 'false'
-  - name: output-validation
-    provider: x-output-validation
-    apply:
-      pipe: response
-      endPoint: proxy
-    options:
-      displayName: Add Output Validation
-      continueOnError: 'true'
-  - name: raiseOutputValidationFault
-    provider: x-raiseOutputValidationFault
-    apply:
-      pipe: response
-      endPoint: proxy
-    options:
-      displayName: Raise Output Validation Error
-      statusCode: 500
-      reasonPhrase: Server Error
-      continueOnError: 'false'
-  - name: add-headers-x-api-key
-    provider: x-headers
-    apply:
-      pipe: request
-      endPoint: target
-    options:
-      displayName: Add AWS api key header
-      headers:
-        x-api-key:
-          type: string
-          default: 'random_api_key'
-          description: >
-            x-api-key header
-  - name: add-headers-token
-    provider: x-headers
-    apply:
-      pipe: request
-      endPoint: target
-    options:
-      displayName: Add token header
-      headers:
-        x-token:
-          type: string
-          default: 'random_token'
-          description: >
-            token header
-  - name: quotaAnil
-    provider: volos-quota-memory
-    options:
-      timeUnit: day
-      interval: 2
-      allow: 2500
-  - name: oauth2
-    provider: volos-oauth-apigee
-    options:
-      tokenLifetime: 300000
-      key: apigeeProxyKey
-      uri: apigeeProxyUri
-      validGrantTypes:
-        - client_credentials
-        - authorization_code
-        - implicit_grant
-        - password
-      tokenPaths: # These will be added to your paths section for you
-        authorize: /authorize
-        token: /accesstoken
-        invalidate: /invalidate
-        refresh: /refresh
 paths:
   /pets:
     get:
-      x-a127-apply:
-        quotaAnil:
-          pipe: request
-          endPoint: proxy
       summary: List all pets
       operationId: listPets
       tags:

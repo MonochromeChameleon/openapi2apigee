@@ -12,36 +12,9 @@ consumes:
   - application/json
 produces:
   - application/json
-x-a127-services:
-  quotaAnil:
-    provider: volos-quota-memory
-    options:
-      timeUnit: day
-      interval: 2
-      allow: 2500
-  oauth2:
-    provider: volos-oauth-apigee
-    options:
-      tokenLifetime: 300000
-      key: apigeeProxyKey
-      uri: apigeeProxyUri
-      validGrantTypes:
-        - client_credentials
-        - authorization_code
-        - implicit_grant
-        - password
-      tokenPaths: # These will be added to your paths section for you
-        authorize: /authorize
-        token: /accesstoken
-        invalidate: /invalidate
-        refresh: /refresh
 path:
   /pets:
     get:
-      x-a127-apply:
-        quotaAnil:
-          pipe: request
-          endPoint: proxy
       summary: List all pets
       operationId: listPets
       tags:

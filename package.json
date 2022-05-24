@@ -33,7 +33,6 @@
   "homepage": "https://github.com/anil614sagar/openapi2apigee",
   "dependencies": {
     "commander": "^2.8.1",
-    "lodash.omit": "4.5.0",
     "swagger-parser": "10.0.0",
     "xmlbuilder": "8.2.2"
   },
@@ -50,24 +49,8 @@
     "openapi-utils-param-to-schema": "0.0.8",
     "openapi-utils-path-for-uri": "0.0.6",
     "openapi-utils-schema-from-api": "0.0.4",
-    "policify": "0.0.12",
     "prettier": "^2.6.2",
-    "rimraf": "^2.5.4",
-    "should": "^11.1.1",
-    "uglify-js": "^2.7.4",
-    "xml2js": "^0.4.17",
-    "z-schema": "^3.18.1"
-  },
-  "standard": {
-    "globals": [
-      "should",
-      "describe",
-      "it"
-    ],
-    "ignore": [
-      "./lib/resource_templates/jsc/bundle-policify.js",
-      "lib/resource_templates/jsc/bundle-policify.js"
-    ]
+    "xml2js": "^0.4.17"
   },
   "engines": {
     "node": ">=14.0.0"

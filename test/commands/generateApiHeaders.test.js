@@ -96,48 +96,5 @@ describe('generateApi with headers', () => {
       expect(headers.Header[3].$.name).toBe('X-Frame-Options');
       expect(headers.Header[3]._).toBe('deny');
     });
-
-    it('Target should contain header step in PreFlow', async () => {
-      const filePath = path.join(
-        options.destination,
-        options.apiProxy,
-        '/apiproxy/targets/default.xml'
-      );
-      const fileData = await fs.readFile(filePath);
-      const parser = new xml2js.Parser();
-      const result = await new Promise((res, rej) => {
-        parser.parseString(fileData, (err, r) => {
-          if (err) rej(err);
-          else res(r);
-        });
-      });
-
-      expect(result.TargetEndpoint.PreFlow[0].Request[0].Step[0].Name[0]).toBe(
-        'Add AWS api key header'
-      );
-      expect(result.TargetEndpoint.PreFlow[0].Request[0].Step[1].Name[0]).toBe(
-        'Add token header'
-      );
-    });
-
-    it('Proxy should contain header step in PostFlow', async () => {
-      const filePath = path.join(
-        options.destination,
-        options.apiProxy,
-        '/apiproxy/proxies/default.xml'
-      );
-      const fileData = await fs.readFile(filePath);
-      const parser = new xml2js.Parser();
-      const result = await new Promise((res, rej) => {
-        parser.parseString(fileData, (err, r) => {
-          if (err) rej(err);
-          else res(r);
-        });
-      });
-
-      expect(result.ProxyEndpoint.PostFlow[0].Response[0].Step[0].Name[0]).toBe(
-        'Add security headers'
-      );
-    });
   });
 });
