@@ -1,4 +1,4 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
   version: 1.0.0
   title: Swagger Petstore Headers
@@ -23,7 +23,7 @@ x-a127-services:
       headers:
         x-api-key:
           type: string
-          default: "random_api_key"
+          default: 'random_api_key'
           description: >
             x-api-key header
   add-headers-token:
@@ -36,7 +36,7 @@ x-a127-services:
       headers:
         x-token:
           type: string
-          default: "random_token"
+          default: 'random_token'
           description: >
             token header
   add-headers-security:
@@ -50,22 +50,22 @@ x-a127-services:
       headers:
         Strict-Transport-Security:
           type: string
-          default: "max-age=31536000; includeSubDomains; preload"
+          default: 'max-age=31536000; includeSubDomains; preload'
           description: >
             HSTS header
         X-XSS-Protection:
           type: string
-          default: "1; mode=block"
+          default: '1; mode=block'
           description: >
             XSS protection header
         X-Content-Type-Options:
           type: string
-          default: "nosniff"
+          default: 'nosniff'
           description: >
             XSS protection header
         X-Frame-Options:
           type: string
-          default: "deny"
+          default: 'deny'
           description: >
             XSS protection header
   quotaAnil:
@@ -85,7 +85,7 @@ x-a127-services:
         - authorization_code
         - implicit_grant
         - password
-      tokenPaths:  # These will be added to your paths section for you
+      tokenPaths: # These will be added to your paths section for you
         authorize: /authorize
         token: /accesstoken
         invalidate: /invalidate
