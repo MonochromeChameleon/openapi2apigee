@@ -10,6 +10,8 @@
     "airbnb-base",
     "plugin:node/recommended",
     "plugin:import/recommended",
+    "plugin:jest/recommended",
+    "plugin:jest/style",
     "prettier"
   ],
   "parserOptions": {
@@ -29,7 +31,10 @@
     {
       "files": ["test/**/*"],
       "env": {
-        "mocha": true
+        "jest": true
+      },
+      "rules": {
+        "node/no-unpublished-import": 0
       }
     }
   ]

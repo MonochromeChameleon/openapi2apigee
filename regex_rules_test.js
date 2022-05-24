@@ -1,6 +1,6 @@
 import { readFile } from 'fs/promises';
 
-const print = function (m1, m2) {
+const print = function print(m1, m2) {
   console.log(m1, m2)
 }
 const context = {
@@ -12,7 +12,7 @@ const context = {
   }
 }
 
-const block = function (haystack, filters) {
+const block = function block(haystack, filters) {
   filters.some((jsonRegex) => {
     // Create a regex from the json string.
     // print('regex',jsonRegex.rule);
@@ -22,8 +22,8 @@ const block = function (haystack, filters) {
     if (hit) {
       print('found', hit[0])
       context.setVariable('FILTER.block', true)
-      return true
     }
+    return hit;
   })
 }
 
@@ -32,7 +32,7 @@ readFile('./regex_rules.js', 'utf8').then((rules) => JSON.parse(rules)).then((el
     const {filters} = element
     if (element.element === 'QueryParam') {
       if (block(decodeURIComponent(context.proxyRequest.url), filters)) {
-        
+        console.log('WHAT');
       }
     }
   });
