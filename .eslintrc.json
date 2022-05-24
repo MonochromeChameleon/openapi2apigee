@@ -1,0 +1,42 @@
+{
+  "env": {
+    "node": true,
+    "es2021": true
+  },
+  "root": true,
+  "ignorePatterns": [],
+  "extends": [
+    "eslint:recommended",
+    "airbnb-base",
+    "plugin:node/recommended",
+    "plugin:import/recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "rules": {
+    "default-case": 0,
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never",
+        "d.ts": "never"
+      }
+    ],
+    "import/no-extraneous-dependencies": 0,
+    "node/no-extraneous-import": 0,
+    "import/no-default-export": 0,
+    "import/prefer-default-export": 0
+  },
+  "overrides": [
+    {
+      "files": ["test/**/*"],
+      "env": {
+        "mocha": true
+      }
+    }
+  ]
+}

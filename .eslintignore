@@ -1,0 +1,5 @@
+.nyc_output
+api_bundles
+coverage
+node_modules
+lib/resource_templates

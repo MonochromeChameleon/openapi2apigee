@@ -1,36 +1,36 @@
-'use strict'
+
 
 import should from 'should';
 import * as path from 'path';
-import { generateApi } from '../../lib/commands/generateApi/generateApi.js';
 import * as fs from 'fs';
 import * as xml2js from 'xml2js';
+import { generateApi } from '../../lib/commands/generateApi/generateApi.js';
 
-describe('generateApi with regex-protection', function () {
-  var options = {
+describe('generateApi with regex-protection', () => {
+  const options = {
     source: path.resolve('test/commands/openapi_files/regex-protection.yaml'),
     destination: path.resolve('api_bundles'),
     apiProxy: 'petStoreRegexProtection'
   }
 
-  describe('generate', function (done) {
-    it('Correct swagger file should generate proxy', function (done) {
-      generateApi(options.apiProxy, options, function (err, reply) {
+  describe('generate', (done) => {
+    it('Correct swagger file should generate proxy', (done) => {
+      generateApi(options.apiProxy, options, (err, reply) => {
         should.equal(err, null)
         done()
       })
     })
   })
 
-  describe('Add regex-protection policy', function () {
-    it('Regexp protection policy should be generated', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy + '/apiproxy/policies/regex-protection.xml')
-      var file = fs.lstatSync(filePath)
+  describe('Add regex-protection policy', () => {
+    it('Regexp protection policy should be generated', (done) => {
+      const filePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/policies/regex-protection.xml`)
+      const file = fs.lstatSync(filePath)
       should.equal(file.isFile(), true)
 
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('Javascript')
         result.should.have.property('Javascript').property('ResourceURL')
@@ -42,27 +42,27 @@ describe('generateApi with regex-protection', function () {
       })
     })
 
-    it('Js files should be generated', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy + '/apiproxy/resources/jsc/regex-protection.js')
-      var file = fs.lstatSync(filePath)
+    it('Js files should be generated', (done) => {
+      let filePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/resources/jsc/regex-protection.js`)
+      let file = fs.lstatSync(filePath)
       should.equal(file.isFile(), true)
-      filePath = path.join(options.destination, options.apiProxy + '/apiproxy/resources/jsc/regex-protection-querystring.js')
+      filePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/resources/jsc/regex-protection-querystring.js`)
       file = fs.lstatSync(filePath)
       should.equal(file.isFile(), true)
-      filePath = path.join(options.destination, options.apiProxy + '/apiproxy/resources/jsc/regex.js')
+      filePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/resources/jsc/regex.js`)
       file = fs.lstatSync(filePath)
       should.equal(file.isFile(), true)
       done()
     })
 
-    it('Raise fault policy should be generated', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy + '/apiproxy/policies/raiseFault.xml')
-      var file = fs.lstatSync(filePath)
+    it('Raise fault policy should be generated', (done) => {
+      const filePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/policies/raiseFault.xml`)
+      const file = fs.lstatSync(filePath)
       should.equal(file.isFile(), true)
 
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('RaiseFault')
         result.should.have.property('RaiseFault').property('FaultResponse')
@@ -74,11 +74,11 @@ describe('generateApi with regex-protection', function () {
       })
     })
 
-    it('Proxy should contain Add Regex Protection step in PreFlow', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+    it('Proxy should contain Add Regex Protection step in PreFlow', (done) => {
+      const filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('ProxyEndpoint')
         result.should.have.property('ProxyEndpoint').property('PreFlow')
@@ -87,11 +87,11 @@ describe('generateApi with regex-protection', function () {
       })
     })
 
-    it('Proxy should contain Raise Regex Error step in PreFlow', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+    it('Proxy should contain Raise Regex Error step in PreFlow', (done) => {
+      const filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('ProxyEndpoint')
         result.should.have.property('ProxyEndpoint').property('PreFlow')
@@ -100,11 +100,11 @@ describe('generateApi with regex-protection', function () {
       })
     })
 
-    it('Proxy should contain parameter check in listPets flow', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+    it('Proxy should contain parameter check in listPets flow', (done) => {
+      const filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         if (result.ProxyEndpoint.Flows[0].Flow[0].$.name === 'listPets') {
           should.equal(result.ProxyEndpoint.Flows[0].Flow[0].Request[0].Step[0].Condition[0], '(request.queryparam.param1 Equals null) or (request.queryparam.param2 Equals null)', 'Param check found in listPets flow')
@@ -114,11 +114,11 @@ describe('generateApi with regex-protection', function () {
       })
     })
 
-    it('Proxy should contain quotaAnil in listPets flow', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+    it('Proxy should contain quotaAnil in listPets flow', (done) => {
+      const filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         if (result.ProxyEndpoint.Flows[0].Flow[0].$.name === 'listPets') {
           should.equal(result.ProxyEndpoint.Flows[0].Flow[0].Request[0].Step[1].Name[0], 'quotaAnil', 'quotaAnil found in listPets flow')

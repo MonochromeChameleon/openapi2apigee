@@ -11,10 +11,10 @@ ZSchema = new ZSchema({
 })
 
 export const policify = {
-  validateSchema: function (injected, schema) {
+  validateSchema (injected, schema) {
     return ZSchema.validate(injected, schema)
   },
-  getLastError: function () {
+  getLastError () {
     return ZSchema.getLastError()
   },
   getResourceForPath: openapiUtilPath.pathForUri,

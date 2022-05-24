@@ -1,36 +1,36 @@
-'use strict'
+
 
 import should from 'should';
 import * as path from 'path';
-import { generateApi } from '../../lib/commands/generateApi/generateApi.js';
 import * as fs from 'fs';
 import * as xml2js from 'xml2js';
+import { generateApi } from '../../lib/commands/generateApi/generateApi.js';
 
-describe('generateApi with schema validation', function () {
-  var options = {
+describe('generateApi with schema validation', () => {
+  const options = {
     source: path.resolve('test/commands/openapi_files/schema-validation.yaml'),
     destination: path.resolve('api_bundles'),
     apiProxy: 'petStoreSchemaValidation'
   }
 
-  describe('generate', function (done) {
-    it('Correct swagger file should generate proxy', function (done) {
-      generateApi(options.apiProxy, options, function (err, reply) {
+  describe('generate', (done) => {
+    it('Correct swagger file should generate proxy', (done) => {
+      generateApi(options.apiProxy, options, (err, reply) => {
         should.equal(err, null)
         done()
       })
     })
   })
 
-  describe('Add schema validation policy', function () {
-    it('Output validation protection policy should be generated', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy + '/apiproxy/policies/output-validation.xml')
-      var file = fs.lstatSync(filePath)
+  describe('Add schema validation policy', () => {
+    it('Output validation protection policy should be generated', (done) => {
+      const filePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/policies/output-validation.xml`)
+      const file = fs.lstatSync(filePath)
       should.equal(file.isFile(), true)
 
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('Javascript')
         result.should.have.property('Javascript').property('ResourceURL')
@@ -43,14 +43,14 @@ describe('generateApi with schema validation', function () {
       })
     })
 
-    it('Input validation protection policy should be generated', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy + '/apiproxy/policies/input-validation.xml')
-      var file = fs.lstatSync(filePath)
+    it('Input validation protection policy should be generated', (done) => {
+      const filePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/policies/input-validation.xml`)
+      const file = fs.lstatSync(filePath)
       should.equal(file.isFile(), true)
 
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('Javascript')
         result.should.have.property('Javascript').property('ResourceURL')
@@ -61,14 +61,14 @@ describe('generateApi with schema validation', function () {
       })
     })
 
-    it('Js files should be generated', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy + '/apiproxy/resources/jsc/schema-validation.js')
-      var file = fs.lstatSync(filePath)
+    it('Js files should be generated', (done) => {
+      let filePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/resources/jsc/schema-validation.js`)
+      let file = fs.lstatSync(filePath)
       should.equal(file.isFile(), true)
-      filePath = path.join(options.destination, options.apiProxy + '/apiproxy/resources/jsc/input-validation.js')
+      filePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/resources/jsc/input-validation.js`)
       file = fs.lstatSync(filePath)
       should.equal(file.isFile(), true)
-      filePath = path.join(options.destination, options.apiProxy + '/apiproxy/resources/jsc/api.js')
+      filePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/resources/jsc/api.js`)
       file = fs.lstatSync(filePath)
       should.equal(file.isFile(), true)
       // filePath = path.join(options.destination, options.apiProxy + "/apiproxy/resources/jsc/regex-utils.js");
@@ -77,14 +77,14 @@ describe('generateApi with schema validation', function () {
       done()
     })
 
-    it('Raise fault policy should be generated', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy + '/apiproxy/policies/raiseOutputValidationFault.xml')
-      var file = fs.lstatSync(filePath)
+    it('Raise fault policy should be generated', (done) => {
+      const filePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/policies/raiseOutputValidationFault.xml`)
+      const file = fs.lstatSync(filePath)
       should.equal(file.isFile(), true)
 
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('RaiseFault')
         result.should.have.property('RaiseFault').property('FaultResponse')
@@ -96,11 +96,11 @@ describe('generateApi with schema validation', function () {
       })
     })
 
-    it('Proxy should contain Add Validation step in PostFlow', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+    it('Proxy should contain Add Validation step in PostFlow', (done) => {
+      const filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('ProxyEndpoint')
         result.should.have.property('ProxyEndpoint').property('PostFlow')
@@ -109,11 +109,11 @@ describe('generateApi with schema validation', function () {
       })
     })
 
-    it('Proxy should contain Raise Validation Error step in PostFlow', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+    it('Proxy should contain Raise Validation Error step in PostFlow', (done) => {
+      const filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('ProxyEndpoint')
         result.should.have.property('ProxyEndpoint').property('PostFlow')
@@ -122,11 +122,11 @@ describe('generateApi with schema validation', function () {
       })
     })
 
-    it('Proxy should contain Extract Path Parameters step in PreFlow', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+    it('Proxy should contain Extract Path Parameters step in PreFlow', (done) => {
+      const filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('ProxyEndpoint')
         result.should.have.property('ProxyEndpoint').property('PreFlow')
@@ -135,11 +135,11 @@ describe('generateApi with schema validation', function () {
       })
     })
 
-    it('Proxy should contain Add Validation step in PreFlow', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+    it('Proxy should contain Add Validation step in PreFlow', (done) => {
+      const filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('ProxyEndpoint')
         result.should.have.property('ProxyEndpoint').property('PreFlow')
@@ -148,11 +148,11 @@ describe('generateApi with schema validation', function () {
       })
     })
 
-    it('Proxy should contain Raise Input Validation Error step in PreFlow', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+    it('Proxy should contain Raise Input Validation Error step in PreFlow', (done) => {
+      const filePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('ProxyEndpoint')
         result.should.have.property('ProxyEndpoint').property('PreFlow')

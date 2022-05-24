@@ -1,40 +1,40 @@
-'use strict'
+
 
 import should from 'should';
 import * as path from 'path';
-import { generateApi } from '../../lib/commands/generateApi/generateApi.js';
 import * as fs from 'fs';
 import * as xml2js from 'xml2js';
+import { generateApi } from '../../lib/commands/generateApi/generateApi.js';
 
-describe('generateApi with CORS proxy (array)', function () {
-  var options = {
+describe('generateApi with CORS proxy (array)', () => {
+  const options = {
     source: path.resolve('test/commands/openapi_files/cors-array.yaml'),
     destination: path.resolve('api_bundles'),
     apiProxy: 'petStoreCorsArray'
   }
 
-  describe('generate', function () {
-    it('Correct openapi file should generate proxy', function (done) {
-      generateApi(options.apiProxy, options, function (err, reply) {
+  describe('generate', () => {
+    it('Correct openapi file should generate proxy', (done) => {
+      generateApi(options.apiProxy, options, (err, reply) => {
         should.equal(err, null)
         done()
       })
     })
   })
 
-  describe('Add cors policy', function () {
-    it('Cors policy should be generated', function (done) {
-      var corsFilePath = path.join(options.destination, options.apiProxy + '/apiproxy/policies/add-cors.xml')
-      var corsFile = fs.lstatSync(corsFilePath)
+  describe('Add cors policy', () => {
+    it('Cors policy should be generated', (done) => {
+      const corsFilePath = path.join(options.destination, `${options.apiProxy  }/apiproxy/policies/add-cors.xml`)
+      const corsFile = fs.lstatSync(corsFilePath)
       should.equal(corsFile.isFile(), true)
 
-      var corsFileData = fs.readFileSync(corsFilePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(corsFileData, function (err, result) {
+      const corsFileData = fs.readFileSync(corsFilePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(corsFileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('AssignMessage')
         result.should.have.property('AssignMessage').property('Add')
-        var headers = result.AssignMessage.Add[0].Headers[0]
+        const headers = result.AssignMessage.Add[0].Headers[0]
         // Check Header name and value
         should.equal(headers.Header[0].$.name, 'Access-Control-Allow-Origin', 'Access-Control-Allow-Origin not found: ')
         should.equal(headers.Header[0]._, '*', 'Access-Control-Allow-Origin not correct')
@@ -42,11 +42,11 @@ describe('generateApi with CORS proxy (array)', function () {
       })
     })
 
-    it('Proxies should contain add-cors step in PreFlow', function (done) {
-      var proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var proxiesFileData = fs.readFileSync(proxiesFilePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(proxiesFileData, function (err, result) {
+    it('Proxies should contain add-cors step in PreFlow', (done) => {
+      const proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const proxiesFileData = fs.readFileSync(proxiesFilePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(proxiesFileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('ProxyEndpoint')
         result.should.have.property('ProxyEndpoint').property('PreFlow')
@@ -56,11 +56,11 @@ describe('generateApi with CORS proxy (array)', function () {
       })
     })
 
-    it('Proxies should contain noRoute for options request', function (done) {
-      var proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var proxiesFileData = fs.readFileSync(proxiesFilePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(proxiesFileData, function (err, result) {
+    it('Proxies should contain noRoute for options request', (done) => {
+      const proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const proxiesFileData = fs.readFileSync(proxiesFilePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(proxiesFileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('ProxyEndpoint')
         result.should.have.property('ProxyEndpoint').property('RouteRule')
@@ -70,11 +70,11 @@ describe('generateApi with CORS proxy (array)', function () {
       })
     })
 
-    it('Proxies should contain OptionsPreFlight step in Flow', function (done) {
-      var proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-      var proxiesFileData = fs.readFileSync(proxiesFilePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(proxiesFileData, function (err, result) {
+    it('Proxies should contain OptionsPreFlight step in Flow', (done) => {
+      const proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+      const proxiesFileData = fs.readFileSync(proxiesFilePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(proxiesFileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('ProxyEndpoint')
         result.should.have.property('ProxyEndpoint').property('Flows')
@@ -84,11 +84,11 @@ describe('generateApi with CORS proxy (array)', function () {
       })
     })
 
-    it('Target should not contain header step in PreFlow', function (done) {
-      var filePath = path.join(options.destination, options.apiProxy, '/apiproxy/targets/default.xml')
-      var fileData = fs.readFileSync(filePath)
-      var parser = new xml2js.Parser()
-      parser.parseString(fileData, function (err, result) {
+    it('Target should not contain header step in PreFlow', (done) => {
+      const filePath = path.join(options.destination, options.apiProxy, '/apiproxy/targets/default.xml')
+      const fileData = fs.readFileSync(filePath)
+      const parser = new xml2js.Parser()
+      parser.parseString(fileData, (err, result) => {
         should.equal(err, null)
         result.should.have.property('TargetEndpoint')
         result.should.have.property('TargetEndpoint').property('PreFlow')

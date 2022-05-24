@@ -1,11 +1,13 @@
 #!/usr/bin/env node
-'use strict';
+
+
+
 import { readFileSync } from 'fs';
 
 import program from 'commander';
 import { generateApi } from '../lib/commands/generateApi/generateApi.js';
 
-var executed = false;
+let executed = false;
 
 const { version: v } = JSON.parse(readFileSync('./package.json', 'utf8'));
 program
@@ -18,25 +20,23 @@ program
   .option('-d, --destination <destination>', 'API Bundle destination location.')
   .option('-n, --netrc', 'Use credentials in $HOME/.netrc (required)')
   .description('Generates Apigee API Bundle')
-  .action(function(apiProxy, options) {
+  .action((apiProxy, options) => {
     executed = true;
-    generateApi(apiProxy, options, function(err, reply) {
+    generateApi(apiProxy, options, (err, reply) => {
       if(err) {
         console.log(err);
         process.exit(1);
       }
-      else {
-        if (options.destination) {
-          console.log('Apigee API bundle generated in location ' + options.destination);
+      else if (options.destination) {
+          console.log(`Apigee API bundle generated in location ${  options.destination}`);
         }
         else {
           console.log('Apigee API bundle generated in current directory. ');
         }
-      }
     });
   });
 
-program.on('--help', function(){
+program.on('--help', ()=> {
   console.log('\n  Examples:');
   console.log('');
   console.log('    $ openapi2apigee generateApi --help');
