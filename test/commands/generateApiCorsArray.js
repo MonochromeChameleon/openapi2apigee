@@ -14,11 +14,8 @@ describe('generateApi with CORS proxy (array)', () => {
   }
 
   describe('generate', () => {
-    it('Correct openapi file should generate proxy', (done) => {
-      generateApi(options.apiProxy, options, (err, reply) => {
-        should.equal(err, null)
-        done()
-      })
+    it('Correct openapi file should generate proxy', async () => {
+      await generateApi(options.apiProxy, options)
     })
   })
 

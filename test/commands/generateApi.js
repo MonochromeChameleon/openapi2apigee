@@ -8,26 +8,24 @@ import { generateSkeleton } from '../../lib/commands/generateApi/generateSkeleto
 
 describe('generateApi', () => {
   describe('generate', () => {
-    it('Incorrect openapi file should generate error..', (done) => {
+    it('Incorrect openapi file should generate error..', async () => {
       const options = {
         source: path.resolve('test/commands/openapi_files/openapi2.yaml'),
         destination: path.resolve('api_bundles')
       }
-      generateApi('petStore', options, (err, reply) => {
-        should.notEqual(err, null)
-        reply.error.should.eql('openapi parsing failed..')
-        done()
-      })
+      try {
+        await generateApi('petStore', options);
+        should.fail('Error not thrown');
+      } catch (err) {
+
+      }
     })
-    it('Correct openapi file should not generate error..', (done) => {
+    it('Correct openapi file should not generate error..', () => {
       const options = {
         source: path.resolve('test/commands/openapi_files/openapi1.yaml'),
         destination: path.resolve('api_bundles')
       }
-      generateApi('petStore', options, (err, reply) => {
-        should.equal(err, null)
-        done()
-      })
+      return generateApi('petStore', options);
     })
   })
 
@@ -50,41 +48,38 @@ describe('generateApi', () => {
   })
 
   describe('generateSkeleton', () => {
-    it('generate Skeleton should create folder structure', (done) => {
+    it('generate Skeleton should create folder structure', async () => {
       const options = {
         source: path.resolve('test/commmands/openapi_files/openapi1.yaml'),
         destination: path.resolve('api_bundles'),
         apiProxy: randomText()
       }
-      generateSkeleton(options.apiProxy, options, (err, reply) => {
-        should.equal(err, null)
-        const rootFolder = fs.lstatSync(path.join(options.destination, options.apiProxy))
-        const proxiesFolder = fs.lstatSync(path.join(options.destination, `${options.apiProxy  }/apiproxy/proxies`))
-        const targetsFolder = fs.lstatSync(path.join(options.destination, `${options.apiProxy  }/apiproxy/targets`))
-        const policiesFolder = fs.lstatSync(path.join(options.destination, `${options.apiProxy  }/apiproxy/policies`))
-        should.equal(rootFolder.isDirectory(), true)
-        should.equal(proxiesFolder.isDirectory(), true)
-        should.equal(targetsFolder.isDirectory(), true)
-        should.equal(policiesFolder.isDirectory(), true)
-        done()
-      })
-    })
-    it('destination path ending with / should generate Skeleton Folder', (done) => {
+
+      await generateSkeleton(options.apiProxy, options);
+
+      const rootFolder = fs.lstatSync(path.join(options.destination, options.apiProxy))
+      const proxiesFolder = fs.lstatSync(path.join(options.destination, `${options.apiProxy  }/apiproxy/proxies`))
+      const targetsFolder = fs.lstatSync(path.join(options.destination, `${options.apiProxy  }/apiproxy/targets`))
+      const policiesFolder = fs.lstatSync(path.join(options.destination, `${options.apiProxy  }/apiproxy/policies`))
+      should.equal(rootFolder.isDirectory(), true)
+      should.equal(proxiesFolder.isDirectory(), true)
+      should.equal(targetsFolder.isDirectory(), true)
+      should.equal(policiesFolder.isDirectory(), true)
+    });
+
+    it('destination path ending with / should generate Skeleton Folder', async () => {
       const options = {
         source: path.resolve('test/commands/openapi_files/openapi1.yaml'),
         destination: path.resolve('api_bundles/'),
         apiProxy: randomText()
       }
-      generateSkeleton(options.apiProxy, options, (err, reply) => {
-        should.equal(err, null)
-        const rootFolder = fs.lstatSync(path.join(options.destination, options.apiProxy))
-        const proxiesFolder = fs.lstatSync(path.join(options.destination, `${options.apiProxy  }/apiproxy/proxies`))
-        const targetsFolder = fs.lstatSync(path.join(options.destination, `${options.apiProxy  }/apiproxy/proxies`))
-        should.equal(rootFolder.isDirectory(), true)
-        should.equal(proxiesFolder.isDirectory(), true)
-        should.equal(targetsFolder.isDirectory(), true)
-        done()
-      })
+      await generateSkeleton(options.apiProxy, options);
+      const rootFolder = fs.lstatSync(path.join(options.destination, options.apiProxy))
+      const proxiesFolder = fs.lstatSync(path.join(options.destination, `${options.apiProxy  }/apiproxy/proxies`))
+      const targetsFolder = fs.lstatSync(path.join(options.destination, `${options.apiProxy  }/apiproxy/proxies`))
+      should.equal(rootFolder.isDirectory(), true)
+      should.equal(proxiesFolder.isDirectory(), true)
+      should.equal(targetsFolder.isDirectory(), true)
     })
   })
 

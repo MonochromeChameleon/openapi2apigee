@@ -14,11 +14,8 @@ describe('generateApi with CORS proxy', () => {
   }
 
   describe('generate', () => {
-    it('Correct openapi file should generate proxy', (done) => {
-      generateApi(options.apiProxy, options, (err, reply) => {
-        should.equal(err, null)
-        done()
-      })
+    it('Correct openapi file should generate proxy', async () => {
+      await generateApi(options.apiProxy, options)
     })
   })
 
@@ -99,55 +96,47 @@ describe('generateApi with CORS proxy', () => {
     })
 
     describe('virtualhosts option', (done) => {
-      it('missing -v flag should generate both default and secure', (done) => {
+      it('missing -v flag should generate both default and secure', async () => {
         options.apiProxy = 'petStoreVirtualBoth'
-        generateApi(options.apiProxy, options, (err, reply) => {
-          should.equal(err, null)
-          const proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-          const proxiesFileData = fs.readFileSync(proxiesFilePath)
-          const parser = new xml2js.Parser()
-          parser.parseString(proxiesFileData, (err, result) => {
-            should.equal(err, null)
-            result.should.have.property('ProxyEndpoint').property('HTTPProxyConnection')
-            const vhost = result.ProxyEndpoint.HTTPProxyConnection[0].VirtualHost
-            vhost.should.eql(['default', 'secure'], 'secure virtual host found')
-            done()
-          })
-        })
-      })
-      it("-v 'secure' should generate secure virtual host", (done) => {
+        await generateApi(options.apiProxy, options);
+
+        const proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+        const proxiesFileData = fs.readFileSync(proxiesFilePath)
+        const parser = new xml2js.Parser()
+        const result = await new Promise((res, rej) => parser.parseString(proxiesFileData, (err, r) => err ? rej(err) : res(r)));
+
+        result.should.have.property('ProxyEndpoint').property('HTTPProxyConnection')
+        const vhost = result.ProxyEndpoint.HTTPProxyConnection[0].VirtualHost
+        vhost.should.eql(['default', 'secure'], 'secure virtual host found')
+      });
+
+      it("-v 'secure' should generate secure virtual host", async () => {
         options.apiProxy = 'petStoreVirtualVirtual'
         options.virtualhosts = 'secure'
-        generateApi(options.apiProxy, options, (err, reply) => {
-          should.equal(err, null)
-          const proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-          const proxiesFileData = fs.readFileSync(proxiesFilePath)
-          const parser = new xml2js.Parser()
-          parser.parseString(proxiesFileData, (err, result) => {
-            should.equal(err, null)
-            result.should.have.property('ProxyEndpoint').property('HTTPProxyConnection')
-            const vhost = result.ProxyEndpoint.HTTPProxyConnection[0].VirtualHost
-            vhost.should.eql(['secure'], 'secure virtual host found')
-            done()
-          })
-        })
-      })
-      it("-v 'default' should generate default virtual host", (done) => {
+        await generateApi(options.apiProxy, options);
+
+        const proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+        const proxiesFileData = fs.readFileSync(proxiesFilePath)
+        const parser = new xml2js.Parser()
+        const result = await new Promise((res, rej) => parser.parseString(proxiesFileData, (err, r) => err ? rej(err) : res(r)));
+
+        result.should.have.property('ProxyEndpoint').property('HTTPProxyConnection')
+        const vhost = result.ProxyEndpoint.HTTPProxyConnection[0].VirtualHost
+        vhost.should.eql(['secure'], 'secure virtual host found')
+      });
+
+      it("-v 'default' should generate default virtual host", async () => {
         options.apiProxy = 'petStoreVirtualDefault'
         options.virtualhosts = 'default'
-        generateApi(options.apiProxy, options, (err, reply) => {
-          should.equal(err, null)
-          const proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
-          const proxiesFileData = fs.readFileSync(proxiesFilePath)
-          const parser = new xml2js.Parser()
-          parser.parseString(proxiesFileData, (err, result) => {
-            should.equal(err, null)
-            result.should.have.property('ProxyEndpoint').property('HTTPProxyConnection')
-            const vhost = result.ProxyEndpoint.HTTPProxyConnection[0].VirtualHost
-            vhost.should.eql(['default'], 'secure virtual host found')
-            done()
-          })
-        })
+        await generateApi(options.apiProxy, options);
+
+        const proxiesFilePath = path.join(options.destination, options.apiProxy, '/apiproxy/proxies/default.xml')
+        const proxiesFileData = fs.readFileSync(proxiesFilePath)
+        const parser = new xml2js.Parser()
+        const result = await new Promise((res, rej) => parser.parseString(proxiesFileData, (err, r) => err ? rej(err) : res(r)));
+        result.should.have.property('ProxyEndpoint').property('HTTPProxyConnection')
+        const vhost = result.ProxyEndpoint.HTTPProxyConnection[0].VirtualHost
+        vhost.should.eql(['default'], 'secure virtual host found')
       })
     })
   })

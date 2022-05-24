@@ -17,19 +17,13 @@
     "sourceType": "module"
   },
   "rules": {
-    "default-case": 0,
     "import/extensions": [
       "error",
-      "ignorePackages",
-      {
-        "ts": "never",
-        "d.ts": "never"
-      }
+      "ignorePackages"
     ],
-    "import/no-extraneous-dependencies": 0,
-    "node/no-extraneous-import": 0,
-    "import/no-default-export": 0,
-    "import/prefer-default-export": 0
+    "import/no-default-export": 2,
+    "import/prefer-default-export": 0,
+    "no-console": 0
   },
   "overrides": [
     {

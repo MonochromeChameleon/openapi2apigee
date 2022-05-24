@@ -14,11 +14,8 @@ describe('generateApi with headers', () => {
   }
 
   describe('generate', (done) => {
-    it('Correct OpenApi file should generate proxy', (done) => {
-      generateApi(options.apiProxy, options, (err, reply) => {
-        should.equal(err, null)
-        done()
-      })
+    it('Correct OpenApi file should generate proxy', async () => {
+      await generateApi(options.apiProxy, options);
     })
   })
 
